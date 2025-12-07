@@ -1,24 +1,22 @@
 package config
 
 import (
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
+    "gorm.io/driver/mysql"
+    "gorm.io/gorm"
 )
 
-// criar variavel de conexao com o banco de dados
-var (
-	db * gorm.DB
-)
-// funcao de conexao database
+var DB *gorm.DB
+
 func Connect() {
-	database, err := gorm.Open("mysql", "root:dev@2025/bookmanager?charset=utf8&parseTime=True&loc=Local")
-	if err != nil {
-		panic("Falha ao conectar ao banco de dados!")
-	}
+    dsn := "root:password@tcp(127.0.0.1:3306)/bookdb?charset=utf8mb4&parseTime=True&loc=Local"
+    database, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+    if err != nil {
+        panic("Erro ao conectar ao banco de dados")
+    }
 
-	db = database
+    DB = database
 }
-// funcao para retornar a conexao com o banco de dados
-func GetDB() * gorm.DB {
-	return db
+
+func GetDB() *gorm.DB {
+	return DB
 }
